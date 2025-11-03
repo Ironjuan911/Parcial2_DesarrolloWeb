@@ -1,7 +1,7 @@
 <template>
     <div>
         <AppNavbar/>
-        <h1>Hello from Hello.vue!</h1>
+        <h1>Hello from Home</h1>
     </div>
 
 </template>
@@ -11,7 +11,7 @@
 import AppNavbar from '../components/Navbar.vue'
 
 export default {
-    name: 'HelloView',
+    name: 'HomeView',
     components: {
         AppNavbar
     }

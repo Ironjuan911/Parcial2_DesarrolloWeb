@@ -1,16 +1,25 @@
 <template>
-  <HelloView/>
+  <div id="app">
+    <RouterView/>
+  </div>
 </template>
 
 <script>
-import HelloView from './view/Hello.vue'
+
+import { RouterView } from 'vue-router'
+//import LibraryView from './view/Library.vue'
 
 export default {
   name: 'App',
+  mounted() {
+    console.log('App mounted.')
+  },
   components: {
-    HelloView
+    //LibraryView,
+    RouterView
   }
 }
+  
 </script>
 
 <style>
