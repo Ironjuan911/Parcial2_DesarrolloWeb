@@ -1,10 +1,22 @@
 <template>
     <div>
         <AppNavbar />
-        <div v-for="element in steamGameList" :key=element.id>
-            <router-link :to="{ path: '/game', query: { appId: element.steam_appid } }" class="d-block">
-                {{ element.name  }} + appId: {{ element.steam_appid }}
-            </router-link>
+        <div class="container">
+            <div class="row">
+                <div v-for="element in steamGameList" :key="element.steam_appid" class = "col-sm-6 col-lg-4  col-xl-3 my-2">
+                    <router-link :to="{ path: '/game', query: { appId: element.steam_appid } }"
+                        class="card ">
+                        <img :src=element.header_image class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ element.name }}</h5>
+                            <p class="card-text">{{ element.short_description }}</p>
+                        </div>
+
+                    </router-link>
+                </div>
+
+            </div>
+
 
 
         </div>
