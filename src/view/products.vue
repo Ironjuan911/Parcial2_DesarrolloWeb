@@ -3,7 +3,7 @@
         <AppNavbar />
         <div class="container">
             <div class="row">
-                <div v-for="element in steamGameList" :key="element.steam_appid" class = "col-sm-6 col-lg-4  col-xl-3 my-2">
+                <div v-for="element in steamGameList" :key="element.steam_appid" class = "col-sm-6 col-lg-4 col-xl-3 my-2">
                     <router-link :to="{ path: '/game', query: { appId: element.steam_appid } }"
                         class="card ">
                         <img :src=element.header_image class="card-img-top" alt="...">

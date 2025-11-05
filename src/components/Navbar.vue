@@ -22,14 +22,16 @@
 
 
           <li class="nav-item dropdown">
-          <button class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Ajustes
-          </button>
-          <ul class="dropdown-menu">
-            <li v-if ="isLoggedIn"><button @click="closeSession"  class="dropdown-item" >Cerrar la sesión actual</button></li>
-            <li><button @click="setDefaultCredentials" class="dropdown-item" >Reestablecer a las credenciales por defecto</button></li>
-          </ul>
-        </li>
+            <button class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Ajustes
+            </button>
+            <ul class="dropdown-menu">
+              <li v-if="isLoggedIn"><button @click="closeSession" class="dropdown-item">Cerrar la sesión actual</button>
+              </li>
+              <li><button @click="setDefaultCredentials" class="dropdown-item">Reestablecer a las credenciales por
+                  defecto</button></li>
+            </ul>
+          </li>
 
 
           <!-- <li class="nav-item">
@@ -52,9 +54,12 @@
             </li>
 
           </template>
-          <template v-if ="isLoggedIn">
-            <div class = "card nav-item px-2 py-1 me-1">
-              hola, {{ user.name }}
+          <template v-if="isLoggedIn">
+            <div class="card nav-item d-flex justify-content-center px-2 py-1 me-1">
+              <div class ="d-flex justify-content-center">
+                hola, {{ user.name }}
+              </div>
+
 
             </div>
 
@@ -98,7 +103,7 @@ export default {
       isLoggedIn: false,
 
 
-      user : null,
+      user: null,
 
 
     }
@@ -113,12 +118,12 @@ export default {
     this.navElements.push(...this.lastElements);
   },
   methods: {
-    closeSession(){
+    closeSession() {
       this.dataManager.closeSession();
       this.isLoggedIn = false;
       this.$router.push({ path: '/' });// Redirect to home after login
     },
-    setDefaultCredentials(){
+    setDefaultCredentials() {
       this.dataManager.setDefaultCredentials();
       this.closeSession();
     }
@@ -138,7 +143,4 @@ nav {
 
 
 }
-
-
-
 </style>
