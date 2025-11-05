@@ -27,7 +27,6 @@ export default class dataManager {
 
     closeSession() {
         localStorage.removeItem('usuarioLogueado');
-        window.location.href = "index.html";
     }
 
     setDefaultCredentials() {

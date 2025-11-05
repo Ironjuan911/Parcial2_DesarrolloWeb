@@ -21,17 +21,15 @@
           </li>
 
 
-          <!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
+          <li class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Ajustes
+          </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li v-if ="isLoggedIn"><button @click="closeSession"  class="dropdown-item" >Cerrar la sesión actual</button></li>
+            <li><button @click="setDefaultCredentials" class="dropdown-item" >Reestablecer a las credenciales por defecto</button></li>
           </ul>
-        </li> -->
+        </li>
 
 
           <!-- <li class="nav-item">
@@ -54,10 +52,14 @@
             </li>
 
           </template>
+          <template v-if ="isLoggedIn">
+            <div class = "card nav-item px-2 py-1 me-1">
+              hola, {{ user.name }}
+
+            </div>
+
+          </template>
         </ul>
-
-
-
 
 
       </div>
@@ -67,10 +69,14 @@
 </template>
 
 <script>
+import dataManager from '@/logic/dataManager';
+
 export default {
   name: 'AppNavbar',
   data() {
     return {
+      dataManager: new dataManager(),
+
       firstElements: [
         { text: 'Inicio', href: '/' },
         { text: 'Productos', href: '/products' },
@@ -80,7 +86,7 @@ export default {
       ],
 
       lastElements: [
-        { text: 'Ajustes', href: '../pages/settings.html' },
+        //{ text: 'Acerca de', href: '/about' },
       ],
       navElements: [],
 
@@ -91,10 +97,8 @@ export default {
 
       isLoggedIn: false,
 
-      userElements: [
-        { text: 'Iniciar Sesión', href: '../pages/perfil.html', style: "btn btn-outline-primary", },
-        { text: 'Registrarse', href: '../pages/logout.html', style: "btn btn-outline-secondary", },
-      ]
+
+      user : null,
 
 
     }
@@ -103,14 +107,23 @@ export default {
     this.navElements = [...this.firstElements];
     if (localStorage.getItem('usuarioLogueado')) {
       this.navElements.push(...this.sesionElements);
+      this.isLoggedIn = true;
+      this.user = JSON.parse(localStorage.getItem('usuarioLogueado'));
     }
     this.navElements.push(...this.lastElements);
   },
   methods: {
-
+    closeSession(){
+      this.dataManager.closeSession();
+      this.isLoggedIn = false;
+      this.$router.push({ path: '/' });// Redirect to home after login
+    },
+    setDefaultCredentials(){
+      this.dataManager.setDefaultCredentials();
+      this.closeSession();
+    }
   }
 }
-
 
 </script>
 
@@ -127,12 +140,5 @@ nav {
 }
 
 
-html {
-    scroll-padding-top: 12% !important;
-}
 
-body {
-    margin-top: 7% !important;
-
-}
 </style>
