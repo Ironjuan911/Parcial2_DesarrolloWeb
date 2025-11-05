@@ -4,7 +4,7 @@
 
         <div class="container">
             <div class="row px-5">
-                <div class="col-lg-7 my-2">
+                <div class="col-lg-7 my-2 order-lg-1 order-2" >
                     <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
                             <!-- <div class="carousel-item active">
@@ -37,7 +37,7 @@
 
                 </div>
 
-                <div class="col-lg-5 my-2 px-4">
+                <div class="col-lg-5 my-2 px-4 order-lg-2 order-1">
                     <img :src="game.header_image" class="mb-3" width="100%" alt="...">
                     <h2>{{ game.name }}</h2>
                     <p>{{ game.short_description }}</p>
