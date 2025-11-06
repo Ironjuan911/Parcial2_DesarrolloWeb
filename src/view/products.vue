@@ -44,14 +44,17 @@ export default {
         }
     },
     async mounted() {
-        for (const game of this.gameList) {
-            try {
-                const gameData = await this.steamDB.importarJuego(game.id);
-                this.steamGameList.push(gameData);
-            } catch (error) {
-                console.error(`Error al importar el juego con AppID ${game.id}:`, error);
-            }
-        }
+        // for (const game of this.gameList) {
+        //     try {
+        //         const gameData = await this.steamDB.importarJuego(game.id);
+        //         this.steamGameList.push(gameData);
+        //     } catch (error) {
+        //         console.error(`Error al importar el juego con AppID ${game.id}:`, error);
+        //     }
+        // }
+
+        const appIdList = this.gameList.map(game => game.id);
+        this.steamGameList = await this.steamDB.processQueue(appIdList, 4); // 4 peticiones simultáneas
     }
 
 
