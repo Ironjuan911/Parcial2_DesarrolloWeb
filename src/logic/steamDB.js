@@ -3,6 +3,38 @@ const urlProxy0 = 'https://api.allorigins.win/get?url=';
 const urlProxy1 = 'https://vercel-proxy-two-beta.vercel.app/api/proxy?url=';
 
 export default class steamDataBase {
+    /**
+     * Procesa una lista de IDs usando una cola con concurrencia limitada.
+     * @param {Array} appIdList - Lista de IDs de juegos a importar.
+     * @param {number} concurrency - Número máximo de peticiones simultáneas.
+     * @returns {Promise<Array>} - Lista de resultados en el mismo orden.
+     */
+    async processQueue(appIdList, concurrency = 4) {
+        const results = [];
+        let i = 0;
+
+        // Worker: procesa tareas mientras haya elementos en la lista
+        async function worker() {
+            while (i < appIdList.length) {
+                const idx = i++;
+                try {
+                    results[idx] = await this.importarJuego(appIdList[idx]);
+                } catch (err) {
+                    results[idx] = null;
+                    console.error(`Error importando juego ${appIdList[idx]}:`, err);
+                }
+            }
+        }
+
+        // Lanzar los workers con el contexto correcto
+        await Promise.all(
+            Array(concurrency)
+                .fill(0)
+                .map(() => worker.call(this))
+        );
+
+        return results;
+    }
     async importarJuego(appId) {
         if (!appId) {
             console.error("Error: Se requiere un AppID.");
