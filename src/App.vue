@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" data-bs-theme="light" class="--bs-body-bg">
     <RouterView/>
   </div>
 </template>
@@ -34,8 +34,14 @@ export default {
 
 html {
   scroll-padding-top: 12% !important;
+  /* background-color: #9ec5fe; */
+  
 }
 body {
   margin-top: 7% !important;
 }
+
+/* #app {
+  background-color: #9ec5fe;
+} */
 </style>

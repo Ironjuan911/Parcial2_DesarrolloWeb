@@ -3,7 +3,7 @@
         <AppNavbar />
 
         <div class="container">
-            <div class="row px-5">
+            <div class="row px-lg-5 px-md-3">
                 <div class="col-lg-7 my-2 order-lg-1 order-2" >
                     <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
@@ -37,7 +37,7 @@
 
                 </div>
 
-                <div class="col-lg-5 my-2 px-4 order-lg-2 order-1">
+                <div class="col-lg-5 my-2 px-lg-4 order-lg-2 order-1">
                     <img :src="game.header_image" class="mb-3" width="100%" alt="...">
                     <h2>{{ game.name }}</h2>
                     <p>{{ game.short_description }}</p>
@@ -81,8 +81,14 @@ export default {
     },
     methods: {
         buygame() {
-            this.dataManager.buygame(this.appId);
-            router.push('/library');
+            if (this.dataManager.buygame(this.appId)){
+                router.push('/library');
+            } else {
+                alert("No se pudo completar la compra.");
+                router.push('/login');
+            }
+            
+            
         }
     }
 

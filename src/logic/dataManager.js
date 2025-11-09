@@ -14,7 +14,7 @@ export default class dataManager {
                         localStorage.setItem('usuarios', JSON.stringify(users));
                         localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
                         alert("Juego comprado con exito!");
-                        break;
+                        return true;
                     }
                 }
 
@@ -22,7 +22,7 @@ export default class dataManager {
 
             }
         }
-
+        return false;
     }
 
     closeSession() {
