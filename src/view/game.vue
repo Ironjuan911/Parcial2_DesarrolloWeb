@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row px-lg-5 px-md-3">
                 <div class="col-lg-7 my-2 order-lg-1 order-2" >
-                    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" data-bs-theme="light">
                         <div class="carousel-inner">
                             <!-- <div class="carousel-item active">
                                 <img src="..." class="d-block w-100" alt="...">
@@ -37,12 +37,11 @@
 
                 </div>
 
-                <div class="col-lg-5 my-2 px-lg-4 order-lg-2 order-1">
+                <div class="col-lg-5 my-2 px-lg-4 order-lg-2 order-1 text-light">
                     <img :src="game.header_image" class="mb-3" width="100%" alt="...">
                     <h2>{{ game.name }}</h2>
                     <p>{{ game.short_description }}</p>
-                    <h4>Price: {{ game.is_free ? 'Free to Play' : '$' + (game.price_overview ?
-                        (game.price_overview.final / 100).toFixed(2) : 'N/A') }}</h4>
+                    <h4>Price: {{ game.is_free ? 'Free to Play' :  (game.price_overview?.final_formatted) }}</h4>
                     <button class="btn btn-primary" @click="buygame">Add to Cart</button>
                 </div>
 
@@ -78,6 +77,7 @@ export default {
     async mounted() {
         this.appId = this.urlParams.get('appId')
         this.game = await this.steamDB.importarJuego(this.appId);
+        console.log(this.game.price_overview);
     },
     methods: {
         buygame() {

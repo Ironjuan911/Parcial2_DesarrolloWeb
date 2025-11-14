@@ -1,9 +1,9 @@
 <template>
     <div>
         <AppNavbar />
-        <div class="container">
-            <div class="row">
-                <h2 class="my-4">Mi Biblioteca</h2>
+        <div class="container" >
+            <div class="row" data-bs-theme="dark">
+                <h2 class="my-4 text-light">Mi Biblioteca</h2>
                 <div v-for="item in libraryList" :key="item.appId" class="col-6 col-md-4 col-lg-3 col-xl-2 my-2">
                     <img :src="item.library_600x900" :alt="'juego ' + item.appId" width="100%">
                 </div>

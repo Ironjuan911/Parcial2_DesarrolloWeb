@@ -55,7 +55,7 @@
 
           </template>
           <template v-if="isLoggedIn">
-            <div class="card nav-item d-flex justify-content-center px-2 py-1 me-1">
+            <div class="card bg-info nav-item d-flex justify-content-center px-2 py-1 me-1 ">
               <div class ="d-flex justify-content-center">
                 hola, {{ user.name }}
               </div>
@@ -132,9 +132,9 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
 nav {
-  position: fixed;
+  position: fixed !important;
   top: 0;
   left: 0;
   width: 100%;

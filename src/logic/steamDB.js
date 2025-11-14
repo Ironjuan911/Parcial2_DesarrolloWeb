@@ -1,6 +1,6 @@
 const urlProxy0 = 'https://api.allorigins.win/get?url=';
 
-const urlProxy1 = 'https://vercel-proxy-two-beta.vercel.app/api/proxy?url=';
+const urlProxy1 = 'https://vercel-proxy-by-iron.vercel.app/api/proxy?url=';
 
 export default class steamDataBase {
     /**
@@ -56,7 +56,7 @@ export default class steamDataBase {
 
 
     async importarJuegoP(appId, urlProxy, text) {
-        const urlSteam = `https://store.steampowered.com/api/appdetails?appids=${appId}&cc=us&l=es`;
+        const urlSteam = `https://store.steampowered.com/api/appdetails?appids=${appId}&l=spanish`;
         let url = urlProxy + urlSteam;
 
 

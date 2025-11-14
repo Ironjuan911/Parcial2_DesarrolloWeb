@@ -5,11 +5,14 @@
             <div class="row">
                 <div v-for="element in steamGameList" :key="element.steam_appid" class = "col-sm-6 col-lg-4 col-xl-3 my-2">
                     <router-link :to="{ path: '/game', query: { appId: element.steam_appid } }"
-                        class="card text-bg-body-color">
+                        class="card productCard bg-info text-decoration-none" data-bs-theme="dark">
                         <img :src=element.header_image class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">{{ element.name }}</h5>
-                            <p class="card-text">{{ element.short_description }}</p>
+                            <div class="card bg-secondary px-1 d-inline-block">
+                                <p class="card-text">{{ element.is_free ? 'Free to Play' :  (element.price_overview?.final_formatted) }}</p>
+                            </div>
+                            
                         </div>
 
                     </router-link>
@@ -44,12 +47,12 @@ export default {
         }
     },
     async mounted() {
-        for (const game of this.gameList) {
+        for (const id of this.gameList) {
             try {
-                const gameData = await this.steamDB.importarJuego(game.id);
+                const gameData = await this.steamDB.importarJuego(id);
                 this.steamGameList.push(gameData);
             } catch (error) {
-                console.error(`Error al importar el juego con AppID ${game.id}:`, error);
+                console.error(`Error al importar el juego con AppID ${id}:`, error);
             }
         }
 
@@ -60,3 +63,9 @@ export default {
 
 }
 </script>
+
+<style>
+.productCard {
+    box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.3);
+}
+</style>
