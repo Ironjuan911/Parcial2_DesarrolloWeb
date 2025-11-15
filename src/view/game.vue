@@ -4,8 +4,9 @@
 
         <div class="container">
             <div class="row px-lg-5 px-md-3">
-                <div class="col-lg-7 my-2 order-lg-1 order-2" >
-                    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" data-bs-theme="light">
+                <div class="col-lg-7 my-2 order-lg-1 order-2">
+                    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel"
+                        data-bs-theme="light">
                         <div class="carousel-inner">
                             <!-- <div class="carousel-item active">
                                 <img src="..." class="d-block w-100" alt="...">
@@ -41,10 +42,33 @@
                     <img :src="game.header_image" class="mb-3" width="100%" alt="...">
                     <h2>{{ game.name }}</h2>
                     <p>{{ game.short_description }}</p>
-                    <h4>Price: {{ game.is_free ? 'Free to Play' :  (game.price_overview?.final_formatted) }}</h4>
+                    <h4>Price: {{ game.is_free ? 'Free to Play' : (game.price_overview?.final_formatted) }}</h4>
                     <button class="btn btn-primary" @click="buygame">Add to Cart</button>
                 </div>
 
+            </div>
+
+            <div class="row px-lg-5 px-md-3">
+
+                <div class="col-xl-8 col-lg-9 col-12 text-light">
+                    <p class="my-3 px-3 py-4 card dark" v-html="game.detailed_description"></p>
+                </div>
+                <div class="col-xl-4 col-12 text-light">
+
+
+                    <div class = "my-3 px-3 py-4 card dark">
+                        <h4 class="mb-3">Especificaciones del sistema</h4>
+                        <div>
+                            <h5>Requisitos mínimos:</h5>
+                            <p v-html="game.pc_requirements?.minimum"></p>
+                        </div>
+                        <div class="mt-3">
+                            <h5>Requisitos recomendados:</h5>
+                            <p v-html="game.pc_requirements?.recommended"></p>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
         </div>
@@ -81,14 +105,14 @@ export default {
     },
     methods: {
         buygame() {
-            if (this.dataManager.buygame(this.appId)){
+            if (this.dataManager.buygame(this.appId)) {
                 router.push('/library');
             } else {
                 alert("No se pudo completar la compra.");
                 router.push('/login');
             }
-            
-            
+
+
         }
     }
 

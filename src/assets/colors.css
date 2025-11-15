@@ -26,7 +26,7 @@
   color: #161920 !important;
 }
 
-[class*="primary"] {
+[class*="primary"]:not(.text-primary) {
   background-color: #5c6373 !important;
   border-color: #393d48 !important;
   

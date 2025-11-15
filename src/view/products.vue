@@ -3,19 +3,37 @@
         <AppNavbar />
         <div class="container">
             <div class="row">
-                <div v-for="element in steamGameList" :key="element.steam_appid" class = "col-sm-6 col-lg-4 col-xl-3 my-2">
+                <div v-for="element in steamGameList" :key="element.steam_appid"
+                    class="col-sm-6 col-lg-4 col-xl-3 my-2">
                     <router-link :to="{ path: '/game', query: { appId: element.steam_appid } }"
                         class="card productCard bg-info text-decoration-none" data-bs-theme="dark">
                         <img :src=element.header_image class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">{{ element.name }}</h5>
                             <div class="card bg-secondary px-1 d-inline-block">
-                                <p class="card-text">{{ element.is_free ? 'Free to Play' :  (element.price_overview?.final_formatted) }}</p>
+                                <p class="card-text">{{ element.is_free ? 'Free to Play' :
+                                    (element.price_overview?.final_formatted) }}</p>
                             </div>
-                            
+
                         </div>
 
                     </router-link>
+                </div>
+                <div v-for="n in gameLeft" :key="n" class="col-sm-6 col-lg-4 col-xl-3 my-2" aria-hidden="true">
+                    <div class="card productCard bg-info text-decoration-none h-100" data-bs-theme="dark">
+                        <div class="card-img-top bg-secondary placeholder-glow"
+                            style="aspect-ratio:2.13/1; width:100%; border-radius:0.375rem;">
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <span class=" placeholder-glow col-6"></span>
+                            </div>
+                            
+                            <div class="card bg-secondary px-1 d-inline-block">
+                                <spam class="card-text placeholder-glow placeholder col-3" style = "width:15px" ></spam>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -42,17 +60,21 @@ export default {
     data() {
         return {
             gameList: gameList,
+            gameLeft: [],
             steamDB: new steamDB(),
             steamGameList: []
         }
     },
     async mounted() {
+        this.gameLeft = [...this.gameList];
         for (const id of this.gameList) {
             try {
                 const gameData = await this.steamDB.importarJuego(id);
                 this.steamGameList.push(gameData);
             } catch (error) {
                 console.error(`Error al importar el juego con AppID ${id}:`, error);
+            } finally {
+                this.gameLeft.pop();
             }
         }
 
