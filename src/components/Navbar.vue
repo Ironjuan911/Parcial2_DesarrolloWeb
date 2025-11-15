@@ -135,7 +135,8 @@ export default {
     closeSession() {
       this.dataManager.closeSession();
       this.isLoggedIn = false;
-      this.$router.push({ path: '/' });// Redirect to home after login
+      //this.$router.push({ path: '/' });// Redirect to home after login
+      window.location.href = '/';
     },
     setDefaultCredentials() {
       this.dataManager.setDefaultCredentials();
