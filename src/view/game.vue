@@ -50,20 +50,18 @@
 
             <div class="row px-lg-5 px-md-3">
 
-                <div class="col-xl-8 col-lg-9 col-12 text-light">
+                <div class="col-xl-7 col-lg-8 col-12 text-light">
                     <p class="my-3 px-3 py-4 card dark" v-html="game.detailed_description"></p>
                 </div>
-                <div class="col-xl-4 col-12 text-light">
+                <div class="col-xl-5 col-12 text-light">
 
 
                     <div class = "my-3 px-3 py-4 card dark">
-                        <h4 class="mb-3">Especificaciones del sistema</h4>
+                        <h4 class="mb-3">System requirements</h4>
                         <div>
-                            <h5>Requisitos mínimos:</h5>
                             <p v-html="game.pc_requirements?.minimum"></p>
                         </div>
                         <div class="mt-3">
-                            <h5>Requisitos recomendados:</h5>
                             <p v-html="game.pc_requirements?.recommended"></p>
                         </div>
                     </div>
@@ -119,3 +117,14 @@ export default {
 
 }
 </script>
+
+<style>
+.bb_img {
+    width: 100%;
+    height: auto;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 1%;
+}
+
+</style>
