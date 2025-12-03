@@ -1,32 +1,67 @@
+import storageLE from '../services/storageLE.js';
+
 export default class dataManager {
-    buygame(appid) {
-        const users = JSON.parse(localStorage.getItem('usuarios')) || [];
-        if (localStorage.getItem('usuarioLogueado')) {
-            const usuario = JSON.parse(localStorage.getItem('usuarioLogueado'));
-            if (!usuario.library.includes(appid)) {
-                usuario.library.push(appid);
+    constructor() {
+        this.storageLE = new storageLE('credentials');
 
-                let userid = usuario.id;
-                
-                for(let user of users) {
-                    if (user.id == userid) {
-                        user.library = usuario.library;
-                        localStorage.setItem('usuarios', JSON.stringify(users));
-                        localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
-                        alert("Juego comprado con exito!");
-                        return true;
-                    }
-                }
-
-
-
-            }
-        }
-        return false;
     }
 
+    async waitForUsers(timeout = 6000) {
+        const start = Date.now();
+        while (!this.users || this.users.length === 0) {
+            if (Date.now() - start > timeout) {
+                throw new Error('Timeout esperando usuarios');
+            }
+            await new Promise(resolve => setTimeout(resolve, 100)); // espera 100ms
+        }
+        return true;
+    }
+
+    async canBuy() {
+        await this.waitForUsers();
+        return this.users.length > 0;
+    }
+
+    async loadUsers() {
+        this.users = [];
+        this.users = await this.storageLE.getAll();
+    }
+
+    async buygame(appid) {
+        if (!sessionStorage.getItem('user')) { // Verifica si hay un usuario logueado
+            return false;
+        }
+
+        let user = JSON.parse(sessionStorage.getItem('user'));
+        let library = JSON.parse(user.library || '[]');
+
+        if (library.includes(appid)) { // Verifica si el juego ya está en la librería
+            return false;
+        }
+
+        library.push(appid);
+        user.library = JSON.stringify(library);
+        sessionStorage.setItem('user', JSON.stringify(user));
+
+        let index;
+
+        for (const usr of this.users) {
+            if (usr.id === user.id) {
+                index = usr._index;
+                break;
+            }
+        }
+
+        this.storageLE.updateData(index, user);
+
+
+        return true;
+
+
+
+    }
     closeSession() {
-        localStorage.removeItem('usuarioLogueado');
+        sessionStorage.removeItem('user');
     }
 
     setDefaultCredentials() {

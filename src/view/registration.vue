@@ -64,10 +64,6 @@ export default {
     async mounted() {
         this.usuarios = await this.storageLE.getAll()
 
-        if (localStorage.getItem('usuarios') === null) {
-            localStorage.setItem('usuarios', JSON.stringify(this.defaultCredentials));
-        }
-
     },
     methods: {
         async submit() {

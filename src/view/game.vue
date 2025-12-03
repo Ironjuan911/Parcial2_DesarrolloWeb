@@ -43,7 +43,7 @@
                     <h2>{{ game.name }}</h2>
                     <p>{{ game.short_description }}</p>
                     <h4>Price: {{ game.is_free ? 'Free to Play' : (game.price_overview?.final_formatted) }}</h4>
-                    <button class="btn btn-primary" @click="buygame">Add to Cart</button>
+                    <button :class="['btn','btn-primary', { disabled: !buyButtonEnabled }]" @click="buygame">Add to Cart</button>
                 </div>
 
             </div>
@@ -93,13 +93,19 @@ export default {
             appId: null,
             steamDB: new steamDB(),
             dataManager: new dataManager(),
-            game: []
+            game: [],
+
+            buyButtonEnabled:false
         }
     },
     async mounted() {
         this.appId = this.urlParams.get('appId')
         this.game = await this.steamDB.importarJuego(this.appId);
+        this.dataManager.loadUsers();
         console.log(this.game.price_overview);
+
+        await this.dataManager.canBuy();
+        this.buyButtonEnabled = this.dataManager.canBuy(this.appId);
     },
     methods: {
         buygame() {
