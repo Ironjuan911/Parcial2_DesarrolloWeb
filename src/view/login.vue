@@ -5,7 +5,7 @@
             <div class="row justify-content-center">
                 <div class="card col-lg-5 py-3">
                     <h2 class="mb-4">Iniciar sesión</h2>
-                    <form>
+                    <form @submit.prevent="submit">
                         <div class="mb-3">
                             <label for="InputEmail1" class="form-label">Correo electrónico:</label>
                             <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp"
@@ -17,7 +17,7 @@
                             <label for="InputPassword1" class="form-label">Contraseña:</label>
                             <input type="password" class="form-control" id="InputPassword1" required v-model="password">
                         </div>
-                        <button type="submit" @click="submit" class="btn btn-primary">Enviar</button>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
                     </form>
                 </div>
             </div>
@@ -31,6 +31,8 @@
 import AppNavbar from '../components/Navbar.vue'
 import defaultCredentials from '../data/defaultCredentials.json'
 
+import storageLE from '../services/storageLE.js'
+
 export default {
     name: 'LoginView',
     components: {
@@ -40,22 +42,27 @@ export default {
         return {
             defaultCredentials: defaultCredentials,
             gmail: null,
-            password: null
+            password: null,
+
+            storageLE: new storageLE('credentials'),
+            usuarios: []
         }
     },
     async mounted() {
+        this.usuarios = await this.storageLE.getAll()
+
         if (localStorage.getItem('usuarios') === null) {
             localStorage.setItem('usuarios', JSON.stringify(this.defaultCredentials));
         }
 
     },
     methods: {
-        submit() {
+        async submit() {
             const email = this.gmail.trim();
             const password = this.password.trim();
 
-            const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-            const usuario = usuarios.find(u => u.email === email && u.password === password);
+            const usuarios = this.usuarios;
+            const usuario = usuarios.find(u => u.email === email && String(u.password) === password);
 
             if (!usuario) {
                 alert('Correo o contraseña incorrectos');
@@ -63,7 +70,7 @@ export default {
             }
 
 
-            localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
+            sessionStorage.setItem('user', JSON.stringify(usuario));
             alert('¡Bienvenido, ' + usuario.name + '!');
             this.$router.push({ path: '/' });// Redirect to home after login
 

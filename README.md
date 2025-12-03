@@ -144,15 +144,3 @@ Este proyecto está inspirado en una página de videojuegos, con funcionalidades
   Comentarios y documentación en el código y README.
 - **Colaboración:**  
   Uso de Git y commits claros.
-
----
-
-## Evidencia de colaboración
-
-- El repositorio contiene commits y contribuciones de ambos integrantes, siguiendo buenas prácticas de trabajo colaborativo en GitHub.
-
----
-
-## Sustentación
-
-La aplicación será presentada mostrando su funcionamiento, la estructura modular, la carga dinámica de componentes, el uso de rutas y componentes Vue, y la gestión de usuarios

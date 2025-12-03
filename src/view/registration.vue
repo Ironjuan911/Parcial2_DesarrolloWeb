@@ -5,7 +5,7 @@
             <div class="row justify-content-center">
                 <div class="card col-lg-5 py-3">
                     <h2 class="mb-4">Crear una cuenta</h2>
-                    <form>
+                    <form @submit.prevent="submit">
                         <div class="mb-3">
                             <label for="InputName" class="form-label">Nombre:</label>
                             <input type="text" class="form-control" id="InputName" required v-model="name">
@@ -27,7 +27,7 @@
                                 v-model="confirmPassword">
                         </div>
 
-                        <button type="submit" @click="submit" class="btn btn-primary">Enviar</button>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
                     </form>
                 </div>
             </div>
@@ -41,6 +41,8 @@
 import AppNavbar from '../components/Navbar.vue'
 import defaultCredentials from '../data/defaultCredentials.json'
 
+import storageLE from '../services/storageLE.js'
+
 
 export default {
     name: 'RegistrationView',
@@ -53,17 +55,22 @@ export default {
             name: '',
             email: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+
+            storageLE: new storageLE('credentials'),
+            usuarios: []
         }
     },
     async mounted() {
+        this.usuarios = await this.storageLE.getAll()
+
         if (localStorage.getItem('usuarios') === null) {
             localStorage.setItem('usuarios', JSON.stringify(this.defaultCredentials));
         }
 
     },
     methods: {
-        submit() {
+        async submit() {
             const name = this.name.trim();
             const email = this.email.trim();
             const age = null;
@@ -75,7 +82,7 @@ export default {
                 return;
             }
 
-            const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+            const usuarios = this.usuarios;
 
 
             if (usuarios.some(u => u.email === email)) {
@@ -97,11 +104,11 @@ export default {
                 age,
                 email,
                 password,
-                library: []
+                library: JSON.stringify([])
             };
 
-            usuarios.push(nuevoUsuario);
-            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            await this.storageLE.createData(nuevoUsuario);
+
             alert('Registro exitoso. Ahora puedes iniciar sesión.');
             this.$router.push({ path: '/login' });
         }
