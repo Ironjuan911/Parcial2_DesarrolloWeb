@@ -28,11 +28,11 @@ export default class dataManager {
     }
 
     async buygame(appid) {
-        if (!sessionStorage.getItem('user')) { // Verifica si hay un usuario logueado
+        if (!localStorage.getItem('user')) { // Verifica si hay un usuario logueado
             return false;
         }
 
-        let user = JSON.parse(sessionStorage.getItem('user'));
+        let user = JSON.parse(localStorage.getItem('user'));
         let library = JSON.parse(user.library || '[]');
 
         if (library.includes(appid)) { // Verifica si el juego ya está en la librería
@@ -41,7 +41,7 @@ export default class dataManager {
 
         library.push(appid);
         user.library = JSON.stringify(library);
-        sessionStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user));
 
         let index;
 
@@ -61,7 +61,7 @@ export default class dataManager {
 
     }
     closeSession() {
-        sessionStorage.removeItem('user');
+        localStorage.removeItem('user');
     }
 
     setDefaultCredentials() {

@@ -124,10 +124,10 @@ export default {
   },
   mounted() {
     this.navElements = [...this.firstElements];
-    if (sessionStorage.getItem('user')) {
+    if (localStorage.getItem('user')) {
       this.navElements.push(...this.sesionElements);
       this.isLoggedIn = true;
-      this.user = JSON.parse(sessionStorage.getItem('user'));
+      this.user = JSON.parse(localStorage.getItem('user'));
     }
     this.navElements.push(...this.lastElements);
   },

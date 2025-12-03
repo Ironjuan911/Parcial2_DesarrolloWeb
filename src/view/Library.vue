@@ -41,7 +41,7 @@ export default {
         }
     },
     async mounted() {
-        this.libraryId = JSON.parse(sessionStorage.getItem('user')).library || [];
+        this.libraryId = JSON.parse(localStorage.getItem('user')).library || [];
         this.libraryId = JSON.parse(this.libraryId); // Debido a que el array de la libreria es un string en la base de datos, lo parceamos
 
         this.libraryLeft = [...this.libraryId];

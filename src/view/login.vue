@@ -66,7 +66,7 @@ export default {
             }
 
 
-            sessionStorage.setItem('user', JSON.stringify(usuario));
+            localStorage.setItem('user', JSON.stringify(usuario));
             alert('¡Bienvenido, ' + usuario.name + '!');
             this.$router.push({ path: '/' });// Redirect to home after login
 
