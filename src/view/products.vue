@@ -48,31 +48,40 @@
 <script>
 
 import AppNavbar from '../components/Navbar.vue'
-import gameList from '../data/gameList.json'
 
 import steamDB from '../logic/steamDB.js'
+import storageLE from '@/services/storageLE'
 
 export default {
     name: 'ProductsView',
+    inject: ['gameListApp','steamGameListApp'],
     components: {
-        AppNavbar
+        AppNavbar,
     },
     data() {
         return {
-            gameList: gameList,
-            gameLeft: [],
             steamDB: new steamDB(),
-            steamGameList: []
+            storageLE: new storageLE('gameProducts'),
+
+            gameList: [], //Lista de juegos a importar
+            gameLeft: [], //Lista de juegos restantes por cargar
+            steamGameList: [] //Lista de juegos importados desde steamDB
+
         }
     },
     async mounted() {
+        this.gameLeft = this.gameListApp(); // gameLeft es un placeholder, mostramos fantasmas de los productos anteriores
+        this.gameList = await this.storageLE.getAll(); //Cargamos los juegos a importar
+
+        this.gameLeft = [];
         this.gameLeft = [...this.gameList];
-        for (const id of this.gameList) {
+        for (const game of this.gameList) {
+            const appId = game.appId;
             try {
-                const gameData = await this.steamDB.importarJuego(id);
+                const gameData = await this.steamDB.importarJuego(appId);
                 this.steamGameList.push(gameData);
             } catch (error) {
-                console.error(`Error al importar el juego con AppID ${id}:`, error);
+                console.error(`Error al importar el juego con AppID ${appId}:`, error);
             } finally {
                 this.gameLeft.pop();
             }
@@ -80,6 +89,11 @@ export default {
 
         // const appIdList = this.gameList.map(game => game.id);
         // this.steamGameList = await this.steamDB.processQueue(appIdList, 4); // 4 peticiones simultáneas
+    },
+    methods: {
+        async updateProducts() {
+            
+        }
     }
 
 

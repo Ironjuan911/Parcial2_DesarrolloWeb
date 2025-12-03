@@ -1,17 +1,36 @@
 <template>
   <div id="app" data-bs-theme="dark" class="--bg-dark">
-    <RouterView/>
+    <RouterView />
   </div>
 </template>
 
 <script>
 
 import { RouterView } from 'vue-router'
-//import LibraryView from './view/Library.vue'
+import storageLE from './services/storageLE';
 
 export default {
   name: 'App',
-  mounted() {
+
+  data() {
+    return {
+      storageLE: new storageLE('gameProducts'),
+
+      gameList: [],
+      steamGameList: []
+    }
+  },
+  provide() {
+    return {
+      gameListApp: () => this.gameList,
+      steamGameListApp: () => this.steamGameList
+    }
+  },
+
+
+  async mounted() {
+    this.gameList = [1,2,3,4,5]; // Placeholder inicial
+    this.gameList = await this.storageLE.getAll(); //Importamos e almacenamos la lista de juegos en el main, para ahorrar tiempo de carga
     console.log('App mounted.')
   },
   components: {
@@ -19,7 +38,7 @@ export default {
     RouterView
   }
 }
-  
+
 </script>
 
 <style scoped>
@@ -34,10 +53,10 @@ export default {
 
 html {
   scroll-padding-top: 12% !important;
-  
+
 }
+
 body {
   margin-top: 7% !important;
 }
-
 </style>

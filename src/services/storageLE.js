@@ -4,12 +4,12 @@
 // Esta es una API REST que utiliza como base
 // de datos una pagina Exel en la carpeta
 // Content de este mismo proyecto (Alojado en el drive del dueño), 
-// la ID de esta carpeta es ID_CARPETA_SHEET
+// la ID de este archivo es [sheetId]
 //
 // Para funcionar como base, debe de recibir
 // 2 parametros:
 //
-// - El nombre del archivo Exel [sheetName]
+// - El id del archivo Exel [sheetId]
 // - El nombre de la hoja a modificar [tabName]
 //
 // Empezemos con los metodos, Lamentablemente 
@@ -52,7 +52,7 @@
 import axios from "axios";
 
 // URL base de tu script implementado
-const baseURL = "https://script.google.com/macros/s/AKfycbyRxJbaNvu63y8XxFch5yovJTs2zx9M0_S2MTnByWYLDxLizYL6VHE5xbPIVI2tO1_S/exec";
+const baseURL = "https://script.google.com/macros/s/AKfycbxCoatx5hTF_KxVsjfrmJWkbAUWqU4sSphqSLizf_TqX6wcjvti4dNZVjduLvmgrH-L/exec";
 
 // Configuración por defecto para evitar problemas con Google
 const axiosConfig = {
@@ -68,11 +68,13 @@ export default class StorageLE {
         // Guardamos los parametros base. 
         // Usamos una propiedad para la URL limpia y params aparte si fuera necesario,
         // pero para mantener tu estilo, construiremos la URL completa.
-        this.sheetName = "SteamLE";
+
+
+        this.sheetId = "1uvLuyzSk9a8sxJxaG_fhhpJQrkSVO_n2-RIZH7g9030"; // ID de la hoja de cálculo
         this.tabName = resourseName;
         
         // Construimos la URL base para este recurso
-        this.resourceURL = `${baseURL}?sheetName=${this.sheetName}&tabName=${this.tabName}`;
+        this.resourceURL = `${baseURL}?sheetId=${this.sheetId}&tabName=${this.tabName}`;
     }
 
     /**
