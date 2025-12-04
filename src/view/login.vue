@@ -30,6 +30,7 @@
 
 import AppNavbar from '../components/Navbar.vue'
 import defaultCredentials from '../data/defaultCredentials.json'
+import { useAdminStore } from '../store/adminStore'
 
 import storageLE from '../services/storageLE.js'
 
@@ -68,6 +69,8 @@ export default {
 
             localStorage.setItem('user', JSON.stringify(usuario));
             alert('¡Bienvenido, ' + usuario.name + '!');
+            const adminStore = useAdminStore();
+            adminStore.setAdminStatus();
             this.$router.push({ path: '/' });// Redirect to home after login
 
         }

@@ -90,6 +90,8 @@
 import dataManager from '@/logic/dataManager';
 import steamDB from '@/logic/steamDB';
 
+import { useAdminStore } from '@/store/adminStore';
+
 export default {
   name: 'AppNavbar',
   data() {
@@ -103,6 +105,10 @@ export default {
       ],
       sesionElements: [
         { text: 'Biblioteca', href: '/library' },
+      ],
+
+      adminElements: [
+        { text: 'Administrador', href: '/admin' },
       ],
 
       lastElements: [
@@ -122,13 +128,20 @@ export default {
 
     }
   },
-  mounted() {
+  async mounted() {
     this.navElements = [...this.firstElements];
     if (localStorage.getItem('user')) {
       this.navElements.push(...this.sesionElements);
       this.isLoggedIn = true;
       this.user = JSON.parse(localStorage.getItem('user'));
     }
+
+    const adminStore = useAdminStore();
+
+    if (await adminStore.checkAdminStatus()) {
+      this.navElements.push(...this.adminElements);
+    }
+
     this.navElements.push(...this.lastElements);
   },
   methods: {

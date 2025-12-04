@@ -7,7 +7,10 @@
 <script>
 
 import { RouterView } from 'vue-router'
+import { ref } from 'vue';
 import storageLE from './services/storageLE';
+
+import { useAdminStore } from '@/store/adminStore';
 
 export default {
   name: 'App',
@@ -22,14 +25,16 @@ export default {
   },
   provide() {
     return {
-      gameListApp: () => this.gameList,
-      steamGameListApp: () => this.steamGameList
+      gameListApp: ref(this.gameList),
+      steamGameListApp: ref(this.steamGameList)
     }
   },
 
 
   async mounted() {
-    this.gameList = [1,2,3,4,5]; // Placeholder inicial
+    const adminStore = useAdminStore();
+    console.log("Admin status: " + await adminStore.checkAdminStatus());
+
     this.gameList = await this.storageLE.getAll(); //Importamos e almacenamos la lista de juegos en el main, para ahorrar tiempo de carga
     console.log('App mounted.')
   },
