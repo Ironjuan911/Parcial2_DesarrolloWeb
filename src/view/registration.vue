@@ -88,10 +88,13 @@ export default {
 
             let id = 0;
 
-            // eslint-disable-next-line no-unused-vars
-            usuarios.forEach(element => {
-                id = id + 1;
-            });
+            for (let i = 0; i < usuarios.length; i++) {
+                if (usuarios[i].id > id) {
+                    id = usuarios[i].id;
+                }
+            }
+            id++;
+
 
 
             const nuevoUsuario = {
