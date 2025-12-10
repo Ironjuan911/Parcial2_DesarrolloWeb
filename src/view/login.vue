@@ -17,7 +17,8 @@
                             <label for="InputPassword1" class="form-label">Contraseña:</label>
                             <input type="password" class="form-control" id="InputPassword1" required v-model="password">
                         </div>
-                        <button type="submit" class="btn btn-primary">Enviar</button>
+                        <button type="submit"
+                            :class="['btn', 'btn-primary','d-flex', 'align-items-center', 'justify-content-center', 'gap-2', 'text-nowrap', { disabled: loadingStore.isLoading }]"><loadingIcon />Enviar</button>
                     </form>
                 </div>
             </div>
@@ -29,19 +30,21 @@
 <script>
 
 import AppNavbar from '../components/Navbar.vue'
-import defaultCredentials from '../data/defaultCredentials.json'
 import { useAdminStore } from '../store/adminStore'
 
 import storageLE from '../services/storageLE.js'
+import {useLoadingStore} from '../store/loadingStore'
+import loadingIcon from '@/components/loadingComponents/loadingIcon.vue';
 
 export default {
     name: 'LoginView',
     components: {
-        AppNavbar
+        AppNavbar,
+        loadingIcon
     },
     data() {
         return {
-            defaultCredentials: defaultCredentials,
+            loadingStore: useLoadingStore(),
             gmail: null,
             password: null,
 

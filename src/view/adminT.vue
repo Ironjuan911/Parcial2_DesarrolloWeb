@@ -1,6 +1,7 @@
 <template>
     <div>
         <AppNavbar />
+        <LoadingScreen />
 
         <div class="container mt-4" v-if="isAdmin">
             <h1 class="text-light mb-4">Panel de Administración</h1>
@@ -79,7 +80,7 @@
                                     <td>{{ product.steam_appid }}</td>
                                     <td>{{ product.name }}</td>
                                     <td>{{ product.is_free ? 'Free to Play' : (product.price_overview?.final_formatted)
-                                        }}</td>
+                                    }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-danger"
                                             @click="deleteProduct(index)">Eliminar</button>
@@ -243,11 +244,13 @@ import AppNavbar from '../components/Navbar.vue'
 import { useAdminStore } from '@/store/adminStore';
 import steamDB from '@/logic/steamDB'; // Importamos la lógica de Steam
 import { Modal } from 'bootstrap';
+import LoadingScreen from '../components/loadingComponents/loadingScreen.vue';
 
 export default {
     name: 'AdminView',
     components: {
-        AppNavbar
+        AppNavbar,
+        LoadingScreen
     },
     data() {
         return {
@@ -306,7 +309,17 @@ export default {
                     this.storageProducts.getAll(),
                     this.storageAdmins.getAll()
                 ]);
-                this.users = usersData;
+
+                this.users = usersData.map(user => {
+                    if (user.library && typeof user.library === 'string') {
+                        try {
+                            user.library = JSON.parse(user.library);
+                        } catch (e) {
+                            user.library = [];
+                        }
+                    } 
+                    return user;
+                });
                 this.products = productsData;
 
                 await this.updateProductsSteamDB();
@@ -339,7 +352,10 @@ export default {
         // --- Gestión de Usuarios ---
         openEditUser(user, index) {
             this.editingUser = JSON.parse(JSON.stringify(user));
-            if (!this.editingUser.library) this.editingUser.library = [];
+
+            if (!this.editingUser.library) {
+                this.editingUser.library = [];
+            }
             this.editingUserIndex = index;
             this.editUserModalInstance.show();
         },
@@ -360,8 +376,12 @@ export default {
 
         async saveUserChanges() {
             try {
-                await this.storageCredentials.updateData(this.editingUserIndex, this.editingUser);
-                this.users[this.editingUserIndex] = this.editingUser;
+                let userToSave = JSON.parse(JSON.stringify(this.editingUser));
+                userToSave.library = JSON.stringify(userToSave.library);
+
+                await this.storageCredentials.updateData(this.editingUserIndex, userToSave);
+
+                this.users[this.editingUserIndex] = JSON.parse(JSON.stringify(this.editingUser));
                 this.editUserModalInstance.hide();
                 alert("Usuario actualizado.");
             } catch (error) {
@@ -471,7 +491,6 @@ export default {
                 alert("Error al revocar.");
             }
         }
-
     },
 };
 </script>

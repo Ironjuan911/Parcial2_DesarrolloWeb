@@ -1,6 +1,7 @@
 <template>
     <div>
         <AppNavbar />
+        <LoadingScreen />
         <div class="container">
             <div class="row">
                 <div v-for="element in steamGameList" :key="element.steam_appid"
@@ -52,11 +53,14 @@ import AppNavbar from '../components/Navbar.vue'
 import steamDB from '../logic/steamDB.js'
 import storageLE from '@/services/storageLE'
 
+import LoadingScreen from '../components/loadingComponents/loadingScreen.vue'
+
 export default {
     name: 'ProductsView',
     inject: ['gameListApp', 'steamGameListApp'],
     components: {
         AppNavbar,
+        LoadingScreen
     },
     data() {
         return {
@@ -94,7 +98,9 @@ export default {
                 const appId = game.appId;
                 try {
                     const gameData = await this.steamDB.importarJuego(appId);
-                    this.steamGameList.push(gameData);
+                    if (gameData) {
+                        this.steamGameList.push(gameData);
+                    }
                 } catch (error) {
                     console.error(`Error al importar el juego con AppID ${appId}:`, error);
                 } finally {

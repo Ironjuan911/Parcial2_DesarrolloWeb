@@ -43,7 +43,11 @@
                     <h2>{{ game.name }}</h2>
                     <p>{{ game.short_description }}</p>
                     <h4>Price: {{ game.is_free ? 'Free to Play' : (game.price_overview?.final_formatted) }}</h4>
-                    <button :class="['btn','btn-primary', { disabled: !buyButtonEnabled }]" @click="buygame">Add to Cart</button>
+                    <button
+                        :class="['btn', 'btn-primary', 'd-flex', 'align-items-center', 'justify-content-center', 'gap-2', 'text-nowrap', { disabled: !buyButtonEnabled }]"
+                        @click="buygame">
+                        <LoadingIcon /><span>Add to Cart</span>
+                    </button>
                 </div>
 
             </div>
@@ -56,7 +60,7 @@
                 <div class="col-xl-5 col-12 text-light">
 
 
-                    <div class = "my-3 px-3 py-4 card dark">
+                    <div class="my-3 px-3 py-4 card dark">
                         <h4 class="mb-3">System requirements</h4>
                         <div>
                             <p v-html="game.pc_requirements?.minimum"></p>
@@ -82,10 +86,13 @@ import AppNavbar from '../components/Navbar.vue'
 import steamDB from '../logic/steamDB.js'
 import dataManager from '@/logic/dataManager';
 
+import LoadingIcon from '../components/loadingComponents/loadingIcon.vue';
+
 export default {
     name: 'GameView',
     components: {
-        AppNavbar
+        AppNavbar,
+        LoadingIcon
     },
     data() {
         return {
@@ -95,7 +102,7 @@ export default {
             dataManager: new dataManager(),
             game: [],
 
-            buyButtonEnabled:false
+            buyButtonEnabled: false
         }
     },
     async mounted() {
@@ -132,5 +139,4 @@ export default {
     padding-right: 0.5rem;
     border-radius: 1%;
 }
-
 </style>

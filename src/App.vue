@@ -9,6 +9,7 @@
 import { RouterView } from 'vue-router'
 import { ref } from 'vue';
 import storageLE from './services/storageLE';
+//import LoadingScreen from './components/loadingComponents/loadingScreen.vue';
 
 import { useAdminStore } from '@/store/adminStore';
 
@@ -40,6 +41,7 @@ export default {
   },
   components: {
     //LibraryView,
+    //LoadingScreen,
     RouterView
   }
 }

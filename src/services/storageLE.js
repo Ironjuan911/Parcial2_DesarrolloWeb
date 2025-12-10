@@ -50,6 +50,7 @@
 
 
 import axios from "axios";
+import { useLoadingStore } from "../store/loadingStore";
 
 // URL base de tu script implementado
 const baseURL = "https://script.google.com/macros/s/AKfycbxCoatx5hTF_KxVsjfrmJWkbAUWqU4sSphqSLizf_TqX6wcjvti4dNZVjduLvmgrH-L/exec";
@@ -75,19 +76,26 @@ export default class StorageLE {
         
         // Construimos la URL base para este recurso
         this.resourceURL = `${baseURL}?sheetId=${this.sheetId}&tabName=${this.tabName}`;
+        this.loadingStore = useLoadingStore();
     }
 
     /**
      * Obtiene todos los registros de la hoja
      */
     async getAll() {
+        let response;
         try {
-            const response = await axios.get(this.resourceURL);
-            return response.data;
+            this.loadingStore.setLoading(true);
+            response = await axios.get(this.resourceURL);
+            
         } catch (error) {
             console.error("Error en getAll:", error);
             throw error;
+        } finally {
+            this.loadingStore.setLoading(false);
         }
+
+        return response.data;
     }
 
     /**
@@ -95,14 +103,18 @@ export default class StorageLE {
      * @param {number} index 
      */
     async getByIndex(index) {
+        let response;
         try {
-            // Pasamos el index como parametro
-            const response = await axios.get(`${this.resourceURL}&index=${index}`);
-            return response.data;
+            this.loadingStore.setLoading(true);
+            response = await axios.get(`${this.resourceURL}&index=${index}`);
         } catch (error) {
             console.error(`Error en getByIndex(${index}):`, error);
             throw error;
+        } finally {
+            this.loadingStore.setLoading(false);
         }
+
+        return response.data;
     }
 
     /**
@@ -111,19 +123,24 @@ export default class StorageLE {
      * @param {object} data Objeto con los datos { Columna: Valor }
      */
     async createData(data) {
+        let response;
         try {
+            this.loadingStore.setLoading(true);
             const url = `${this.resourceURL}&action=create`;
             
             // 1. Convertimos a String manualmente
             const payload = JSON.stringify(data);
 
             // 2. Enviamos con la configuración text/plain
-            const response = await axios.post(url, payload, axiosConfig);
-            return response.data;
+            response = await axios.post(url, payload, axiosConfig);
         } catch (error) {
             console.error("Error en createData:", error);
             throw error;
+        } finally {
+            this.loadingStore.setLoading(false);
         }
+
+        return response.data;
     }
 
     /**
@@ -132,18 +149,23 @@ export default class StorageLE {
      * @param {object} data Datos a cambiar
      */
     async updateData(index, data) {
+        let response;
         try {
+            this.loadingStore.setLoading(true);
             const url = `${this.resourceURL}&action=update&index=${index}`;
             
             // Truco anti-CORS
             const payload = JSON.stringify(data);
             
-            const response = await axios.post(url, payload, axiosConfig);
-            return response.data;
+            response = await axios.post(url, payload, axiosConfig);
         } catch (error) {
             console.error(`Error en updateData(${index}):`, error);
             throw error;
+        } finally {
+            this.loadingStore.setLoading(false);
         }
+
+        return response.data;
     }
 
     /**
@@ -151,16 +173,21 @@ export default class StorageLE {
      * @param {number} index Índice a eliminar
      */
     async deleteData(index) {
+        let response;
         try {
+            this.loadingStore.setLoading(true);
             const url = `${this.resourceURL}&action=delete&index=${index}`;
             
             // Aunque no enviemos datos, enviamos un body vacío stringified
             // y la cabecera text/plain para mantener consistencia y evitar errores 411/CORS.
-            const response = await axios.post(url, JSON.stringify({}), axiosConfig);
-            return response.data;
+            response = await axios.post(url, JSON.stringify({}), axiosConfig);
         } catch (error) {
             console.error(`Error en deleteData(${index}):`, error);
             throw error;
+        } finally {
+            this.loadingStore.setLoading(false);
         }
+
+        return response.data;
     }
 }

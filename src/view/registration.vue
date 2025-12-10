@@ -1,6 +1,7 @@
 <template>
     <div>
         <AppNavbar />
+        <loadingScreen v-if="loadedRegistration" />
         <div class="container my-4">
             <div class="row justify-content-center">
                 <div class="card col-lg-5 py-3">
@@ -27,7 +28,10 @@
                                 v-model="confirmPassword">
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Enviar</button>
+                        <button type="submit"
+                            :class="['btn', 'btn-primary', 'd-flex', 'align-items-center', 'justify-content-center', 'gap-2', 'text-nowrap', { disabled: loadingStore.isLoading }]">
+                            <loadingIcon />Enviar
+                        </button>
                     </form>
                 </div>
             </div>
@@ -39,31 +43,37 @@
 <script>
 
 import AppNavbar from '../components/Navbar.vue'
-import defaultCredentials from '../data/defaultCredentials.json'
 
 import storageLE from '../services/storageLE.js'
+import loadingScreen from '@/components/loadingComponents/loadingScreen.vue';
+import loadingIcon from '@/components/loadingComponents/loadingIcon.vue';
+
+import { useLoadingStore } from '../store/loadingStore'
 
 
 export default {
     name: 'RegistrationView',
     components: {
-        AppNavbar
+        AppNavbar,
+        loadingScreen,
+        loadingIcon,
     },
     data() {
         return {
-            defaultCredentials: defaultCredentials,
             name: '',
             email: '',
             password: '',
             confirmPassword: '',
 
             storageLE: new storageLE('credentials'),
-            usuarios: []
+            usuarios: [],
+            loadingStore: useLoadingStore(),
+            loadedRegistration: false
         }
     },
     async mounted() {
         this.usuarios = await this.storageLE.getAll()
-
+        this.loadedRegistration = true
     },
     methods: {
         async submit() {

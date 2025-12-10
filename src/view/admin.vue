@@ -2,7 +2,7 @@
 
     <div>
         <AppNavbar />
-
+        <LoadingScreen />
         <div class="container mt-4" v-if="isAdmin">
             <h1 class="text-light">Panel de Administración</h1>
             <p class="text-primary">Bienvenido al panel de administración. Aquí puedes gestionar la aplicación.</p>
@@ -17,11 +17,13 @@
 import storageLE from '@/services/storageLE';
 import AppNavbar from '../components/Navbar.vue'
 import { useAdminStore } from '@/store/adminStore';
+import LoadingScreen from '../components/loadingComponents/loadingScreen.vue';
 
 export default {
     name: 'AdminView',
     components: {
-        AppNavbar
+        AppNavbar,
+        LoadingScreen
     },
     data() {
         return {
