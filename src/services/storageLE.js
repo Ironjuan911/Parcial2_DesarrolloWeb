@@ -85,14 +85,14 @@ export default class StorageLE {
     async getAll() {
         let response;
         try {
-            this.loadingStore.setLoading(true);
+            this.loadingStore.loadingPromise();
             response = await axios.get(this.resourceURL);
             
         } catch (error) {
             console.error("Error en getAll:", error);
             throw error;
         } finally {
-            this.loadingStore.setLoading(false);
+            this.loadingStore.solvePromise();
         }
 
         return response.data;
@@ -105,13 +105,13 @@ export default class StorageLE {
     async getByIndex(index) {
         let response;
         try {
-            this.loadingStore.setLoading(true);
+            this.loadingStore.loadingPromise();
             response = await axios.get(`${this.resourceURL}&index=${index}`);
         } catch (error) {
             console.error(`Error en getByIndex(${index}):`, error);
             throw error;
         } finally {
-            this.loadingStore.setLoading(false);
+            this.loadingStore.solvePromise();
         }
 
         return response.data;
@@ -125,7 +125,7 @@ export default class StorageLE {
     async createData(data) {
         let response;
         try {
-            this.loadingStore.setLoading(true);
+            this.loadingStore.loadingPromise();
             const url = `${this.resourceURL}&action=create`;
             
             // 1. Convertimos a String manualmente
@@ -137,7 +137,7 @@ export default class StorageLE {
             console.error("Error en createData:", error);
             throw error;
         } finally {
-            this.loadingStore.setLoading(false);
+            this.loadingStore.solvePromise();
         }
 
         return response.data;
@@ -151,7 +151,7 @@ export default class StorageLE {
     async updateData(index, data) {
         let response;
         try {
-            this.loadingStore.setLoading(true);
+            this.loadingStore.loadingPromise();
             const url = `${this.resourceURL}&action=update&index=${index}`;
             
             // Truco anti-CORS
@@ -162,7 +162,7 @@ export default class StorageLE {
             console.error(`Error en updateData(${index}):`, error);
             throw error;
         } finally {
-            this.loadingStore.setLoading(false);
+            this.loadingStore.solvePromise();
         }
 
         return response.data;
@@ -175,7 +175,7 @@ export default class StorageLE {
     async deleteData(index) {
         let response;
         try {
-            this.loadingStore.setLoading(true);
+            this.loadingStore.loadingPromise();
             const url = `${this.resourceURL}&action=delete&index=${index}`;
             
             // Aunque no enviemos datos, enviamos un body vacío stringified
@@ -185,7 +185,7 @@ export default class StorageLE {
             console.error(`Error en deleteData(${index}):`, error);
             throw error;
         } finally {
-            this.loadingStore.setLoading(false);
+            this.loadingStore.solvePromise();
         }
 
         return response.data;
