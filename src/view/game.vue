@@ -1,6 +1,7 @@
 <template>
     <div>
         <AppNavbar />
+        <AlertModal id="gameAlert" ref="alertModal" />
 
         <div class="container">
             <div class="row px-lg-5 px-md-3">
@@ -87,12 +88,14 @@ import steamDB from '../logic/steamDB.js'
 import dataManager from '@/logic/dataManager';
 
 import LoadingIcon from '../components/loadingComponents/loadingIcon.vue';
+import AlertModal from '../components/modals/alertModal.vue';
 
 export default {
     name: 'GameView',
     components: {
         AppNavbar,
-        LoadingIcon
+        LoadingIcon,
+        AlertModal
     },
     data() {
         return {
@@ -115,12 +118,20 @@ export default {
         this.buyButtonEnabled = this.dataManager.canBuy(this.appId);
     },
     methods: {
-        buygame() {
-            if (this.dataManager.buygame(this.appId)) {
+        async buygame() {
+
+            try {
+                await this.dataManager.buygame(this.appId);
                 router.push('/library');
-            } else {
-                alert("No se pudo completar la compra.");
-                router.push('/login');
+            } catch (error) {
+                console.log(error);
+                await this.$refs.alertModal.alertM('Error', error.message);
+
+                if (error.message === 'No hay un usuario logueado') {
+                    router.push('/login');
+                } else if (error.message === 'El juego ya está en la librería') {
+                    router.push('/');
+                }
             }
 
 

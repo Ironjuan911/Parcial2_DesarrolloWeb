@@ -6,40 +6,13 @@
             <div class="row">
                 <div v-for="element in steamGameList" :key="element.steam_appid"
                     class="col-sm-6 col-lg-4 col-xl-3 my-2">
-                    <router-link :to="{ path: '/game', query: { appId: element.steam_appid } }"
-                        class="card productCard bg-info text-decoration-none" data-bs-theme="dark">
-                        <img :src=element.header_image class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ element.name }}</h5>
-                            <div class="card bg-secondary px-1 d-inline-block">
-                                <p class="card-text">{{ element.is_free ? 'Free to Play' :
-                                    (element.price_overview?.final_formatted) }}</p>
-                            </div>
-
-                        </div>
-
-                    </router-link>
+                    <ProductCard :gameData="element" />
                 </div>
                 <div v-for="n in gameLeft" :key="n" class="col-sm-6 col-lg-4 col-xl-3 my-2" aria-hidden="true">
-                    <div class="card productCard bg-info text-decoration-none h-100" data-bs-theme="dark">
-                        <div class="card-img-top bg-secondary placeholder-glow"
-                            style="aspect-ratio:2.13/1; width:100%; border-radius:0.375rem;">
-                        </div>
-                        <div class="card-body">
-                            <div>
-                                <span class=" placeholder-glow col-6"></span>
-                            </div>
-
-                            <div class="card bg-secondary px-1 d-inline-block">
-                                <span class="card-text placeholder-glow placeholder col-3" style="width:15px"></span>
-                            </div>
-                        </div>
-                    </div>
+                    <ProductCard :gameData="undefined" />
                 </div>
 
             </div>
-
-
 
         </div>
     </div>
@@ -49,6 +22,7 @@
 <script>
 
 import AppNavbar from '../components/Navbar.vue'
+import ProductCard from '../components/gameCards/product.vue'
 
 import steamDB from '../logic/steamDB.js'
 import storageLE from '@/services/storageLE'
@@ -60,7 +34,8 @@ export default {
     inject: ['gameListApp', 'steamGameListApp'],
     components: {
         AppNavbar,
-        LoadingScreen
+        LoadingScreen,
+        ProductCard
     },
     data() {
         return {
@@ -114,9 +89,3 @@ export default {
 
 }
 </script>
-
-<style>
-.productCard {
-    box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.3);
-}
-</style>

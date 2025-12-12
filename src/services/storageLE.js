@@ -62,6 +62,7 @@ const axiosConfig = {
         // que Google Apps Script no soporta.
         "Content-Type": "text/plain;charset=utf-8",
     },
+    timeout: 15000, // 15 segundos de timeout
 };
 
 export default class StorageLE {
@@ -73,7 +74,7 @@ export default class StorageLE {
 
         this.sheetId = "1uvLuyzSk9a8sxJxaG_fhhpJQrkSVO_n2-RIZH7g9030"; // ID de la hoja de cálculo
         this.tabName = resourseName;
-        
+
         // Construimos la URL base para este recurso
         this.resourceURL = `${baseURL}?sheetId=${this.sheetId}&tabName=${this.tabName}`;
         this.loadingStore = useLoadingStore();
@@ -87,7 +88,7 @@ export default class StorageLE {
         try {
             this.loadingStore.loadingPromise();
             response = await axios.get(this.resourceURL);
-            
+
         } catch (error) {
             console.error("Error en getAll:", error);
             throw error;
@@ -127,7 +128,7 @@ export default class StorageLE {
         try {
             this.loadingStore.loadingPromise();
             const url = `${this.resourceURL}&action=create`;
-            
+
             // 1. Convertimos a String manualmente
             const payload = JSON.stringify(data);
 
@@ -153,10 +154,10 @@ export default class StorageLE {
         try {
             this.loadingStore.loadingPromise();
             const url = `${this.resourceURL}&action=update&index=${index}`;
-            
+
             // Truco anti-CORS
             const payload = JSON.stringify(data);
-            
+
             response = await axios.post(url, payload, axiosConfig);
         } catch (error) {
             console.error(`Error en updateData(${index}):`, error);
@@ -177,7 +178,7 @@ export default class StorageLE {
         try {
             this.loadingStore.loadingPromise();
             const url = `${this.resourceURL}&action=delete&index=${index}`;
-            
+
             // Aunque no enviemos datos, enviamos un body vacío stringified
             // y la cabecera text/plain para mantener consistencia y evitar errores 411/CORS.
             response = await axios.post(url, JSON.stringify({}), axiosConfig);

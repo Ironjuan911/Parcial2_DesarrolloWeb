@@ -1,6 +1,9 @@
 <template>
     <div>
+        <AlertModal id="loginAlert" ref="alertModal" />
+
         <AppNavbar />
+
         <div class="container my-4">
             <div class="row justify-content-center">
                 <div class="card col-lg-5 py-3">
@@ -18,7 +21,9 @@
                             <input type="password" class="form-control" id="InputPassword1" required v-model="password">
                         </div>
                         <button type="submit"
-                            :class="['btn', 'btn-primary','d-flex', 'align-items-center', 'justify-content-center', 'gap-2', 'text-nowrap', { disabled: loadingStore.isLoading }]"><loadingIcon />Enviar</button>
+                            :class="['btn', 'btn-primary', 'd-flex', 'align-items-center', 'justify-content-center', 'gap-2', 'text-nowrap', { disabled: loadingStore.isLoading }]">
+                            <loadingIcon />Enviar
+                        </button>
                     </form>
                 </div>
             </div>
@@ -33,14 +38,16 @@ import AppNavbar from '../components/Navbar.vue'
 import { useAdminStore } from '../store/adminStore'
 
 import storageLE from '../services/storageLE.js'
-import {useLoadingStore} from '../store/loadingStore'
+import { useLoadingStore } from '../store/loadingStore'
 import loadingIcon from '@/components/loadingComponents/loadingIcon.vue';
+import AlertModal from '@/components/modals/alertModal.vue';
 
 export default {
     name: 'LoginView',
     components: {
         AppNavbar,
-        loadingIcon
+        loadingIcon,
+        AlertModal
     },
     data() {
         return {
@@ -49,7 +56,9 @@ export default {
             password: null,
 
             storageLE: new storageLE('credentials'),
-            usuarios: []
+            usuarios: [],
+
+
         }
     },
     async mounted() {
@@ -65,16 +74,18 @@ export default {
             const usuario = usuarios.find(u => u.email === email && String(u.password) === password);
 
             if (!usuario) {
-                alert('Correo o contraseña incorrectos');
+                await this.$refs.alertModal.alertM('Error', 'Correo o contraseña incorrectos');
                 return;
             }
 
 
             localStorage.setItem('user', JSON.stringify(usuario));
-            alert('¡Bienvenido, ' + usuario.name + '!');
+            await this.$refs.alertModal.alertM('Inicio de sesión exitoso', '¡Bienvenido, ' + usuario.name + '!');
+
             const adminStore = useAdminStore();
             adminStore.setAdminStatus();
-            this.$router.push({ path: '/' });// Redirect to home after login
+
+            this.$router.push({ path: '/' });
 
         }
     }

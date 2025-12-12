@@ -45,7 +45,7 @@ export default {
             isLoggedIn: false,
         }
     },mounted() {
-        const usuarioLogueado = localStorage.getItem('usuarioLogueado');
+        const usuarioLogueado = localStorage.getItem('user');
         if (usuarioLogueado) {
             this.isLoggedIn = true;
         }

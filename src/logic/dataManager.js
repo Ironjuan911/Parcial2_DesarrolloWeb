@@ -29,14 +29,18 @@ export default class dataManager {
 
     async buygame(appid) {
         if (!localStorage.getItem('user')) { // Verifica si hay un usuario logueado
-            return false;
+            throw new Error('No hay un usuario logueado');
         }
 
         let user = JSON.parse(localStorage.getItem('user'));
         let library = JSON.parse(user.library || '[]');
 
-        if (library.includes(appid)) { // Verifica si el juego ya está en la librería
-            return false;
+        for (let game of library) {
+            game = String(game);
+            appid = String(appid);
+            if (game === appid) {
+                throw new Error('El juego ya está en la librería');
+            }
         }
 
         library.push(appid);
@@ -55,7 +59,7 @@ export default class dataManager {
         this.storageLE.updateData(index, user);
 
 
-        return true;
+        
 
 
 

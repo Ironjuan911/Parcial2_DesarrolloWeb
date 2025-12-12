@@ -2,6 +2,7 @@
     <div>
         <AppNavbar />
         <loadingScreen v-if="loadedRegistration" />
+        <AlertModal id="registrationAlert" ref="alertModal" />
         <div class="container my-4">
             <div class="row justify-content-center">
                 <div class="card col-lg-5 py-3">
@@ -47,6 +48,7 @@ import AppNavbar from '../components/Navbar.vue'
 import storageLE from '../services/storageLE.js'
 import loadingScreen from '@/components/loadingComponents/loadingScreen.vue';
 import loadingIcon from '@/components/loadingComponents/loadingIcon.vue';
+import AlertModal from '@/components/modals/alertModal.vue';
 
 import { useLoadingStore } from '../store/loadingStore'
 
@@ -57,6 +59,7 @@ export default {
         AppNavbar,
         loadingScreen,
         loadingIcon,
+        AlertModal
     },
     data() {
         return {
@@ -92,7 +95,7 @@ export default {
 
 
             if (usuarios.some(u => u.email === email)) {
-                alert('El correo ya está registrado');
+                await this.$refs.alertModal.alertM('Error', 'El correo ya está registrado');
                 return;
             }
 
@@ -118,7 +121,7 @@ export default {
 
             await this.storageLE.createData(nuevoUsuario);
 
-            alert('Registro exitoso. Ahora puedes iniciar sesión.');
+            await this.$refs.alertModal.alertM('Registro exitoso', 'Ahora puedes iniciar sesión.');
             this.$router.push({ path: '/login' });
         }
     }
