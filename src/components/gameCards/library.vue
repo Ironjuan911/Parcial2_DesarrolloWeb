@@ -1,4 +1,5 @@
 <template>
+    <loading-screen v-if="mounted"></loading-screen>
     <div>
         <!-- Game Card - clickable -->
         <div v-if="!placeholderMode" @click="openGameModal" style="cursor: pointer;">
@@ -64,17 +65,22 @@
 <script>
 import { Modal } from 'bootstrap';
 import steamDB from '@/services/steamDB.js';
+import loadingScreen from '@/components/loadingComponents/loadingScreen.vue';
 
 export default {
     name: "libraryCard",
     props: ['gameData'],
     emits: ['refund'],
+    components: {
+        loadingScreen
+    },
     data() {
         return {
             modal: null,
             steamDB: new steamDB(),
             gameDetails: null,
-            loadingDetails: false
+            loadingDetails: false,
+            mounted: false
         }
     },
     computed: {
@@ -89,6 +95,7 @@ export default {
                 this.modal = new Modal(modalElement);
             }
         }
+        this.mounted = true;
     },
     methods: {
         async openGameModal() {
@@ -127,7 +134,7 @@ export default {
 
 .libraryCard:hover {
     transform: scale(1.03);
-    box-shadow: 0px 0px 15px 5px rgba(100, 149, 237, 0.4);
+    box-shadow: 0px 0px 3px 1px rgba(100, 149, 237, 0.4);
 }
 
 .placeholder-glow {
