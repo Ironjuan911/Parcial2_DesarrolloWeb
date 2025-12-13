@@ -55,6 +55,7 @@ import { useLoadingStore } from '../store/loadingStore'
 
 export default {
     name: 'RegistrationView',
+    inject: ['showToast'],
     components: {
         AppNavbar,
         loadingScreen,
@@ -87,7 +88,7 @@ export default {
             const confirmPassword = this.confirmPassword.trim();
 
             if (password !== confirmPassword) {
-                alert('Las contraseñas no coinciden');
+                this.showToast('error', 'Error', 'Las contraseñas no coinciden');
                 return;
             }
 

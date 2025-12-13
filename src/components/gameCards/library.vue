@@ -71,6 +71,7 @@ export default {
     name: "libraryCard",
     props: ['gameData'],
     emits: ['refund'],
+    inject: ['showConfirm'],
     components: {
         loadingScreen
     },
@@ -95,10 +96,10 @@ export default {
                 this.modal = new Modal(modalElement);
             }
         }
-        this.mounted = true;
     },
     methods: {
         async openGameModal() {
+            this.mounted = true;
             if (!this.gameData || !this.modal) return;
 
             this.loadingDetails = true;
@@ -115,8 +116,16 @@ export default {
 
             this.modal.show();
         },
-        requestRefund() {
-            if (confirm("¿Estás seguro de que deseas solicitar un reembolso para este juego?")) {
+        async requestRefund() {
+            const confirmed = await this.showConfirm({
+                title: 'Solicitar Reembolso',
+                message: '¿Estás seguro de que deseas solicitar un reembolso para este juego?',
+                type: 'danger',
+                confirmText: 'Sí, reembolsar',
+                cancelText: 'Cancelar'
+            });
+
+            if (confirmed) {
                 this.$emit('refund', this.gameData.appId);
                 this.modal.hide();
             }

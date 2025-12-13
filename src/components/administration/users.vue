@@ -88,6 +88,7 @@ export default {
     name: 'AdminUsers',
     props: ['credentials', 'products', 'storageCredentials'],
     emits: ['userUpdated', 'userDeleted'],
+    inject: ['showToast', 'showConfirm'],
     components: {
         defaultModal,
         alertModal
@@ -172,7 +173,7 @@ export default {
         addGameToUser() {
             if (!this.selectedGameToAdd) return;
             if (this.editingUser.library.includes(this.selectedGameToAdd)) {
-                alert("El usuario ya tiene este juego.");
+                this.showToast('warning', 'Advertencia', 'El usuario ya tiene este juego.');
                 return;
             }
             this.editingUser.library.push(this.selectedGameToAdd);
@@ -200,10 +201,10 @@ export default {
                 this.$emit('userUpdated', this.editingUserIndex, userToSave);
 
                 this.$refs.modal.closeModal();
-                // Sin alert de éxito - el modal se cierra correctamente
+                this.showToast('success', 'Éxito', 'Cambios guardados correctamente.');
             } catch (error) {
                 console.error(error);
-                alert("Error al guardar los cambios.");
+                this.showToast('error', 'Error', 'Error al guardar los cambios.');
             }
         },
 
@@ -224,13 +225,23 @@ export default {
         },
 
         async deleteUser(index) {
-            if (!confirm("¿Eliminar usuario?")) return;
+            const confirmed = await this.showConfirm({
+                title: 'Eliminar Usuario',
+                message: '¿Eliminar este usuario?',
+                type: 'danger',
+                confirmText: 'Sí, eliminar',
+                cancelText: 'Cancelar'
+            });
+
+            if (!confirmed) return;
+
             try {
                 await this.storageCredentials.deleteData(index);
                 this.$emit('userDeleted', index);
+                this.showToast('success', 'Éxito', 'Usuario eliminado correctamente.');
             } catch (error) {
                 console.error(error);
-                this.$refs.alertModal.alertM("Error al eliminar.", "Error al eliminar.");
+                this.showToast('error', 'Error', 'Error al eliminar el usuario.');
             }
         },
     },

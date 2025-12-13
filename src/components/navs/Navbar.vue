@@ -21,15 +21,13 @@
           </li>
 
 
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" v-if="isLoggedIn">
             <button class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Ajustes
             </button>
             <ul class="dropdown-menu">
-              <li v-if="isLoggedIn"><button @click="closeSession" class="dropdown-item">Cerrar la sesión actual</button>
+              <li v-if="isLoggedIn"><button @click="closeSession" class="dropdown-item">Cerrar la sesión actual del usuario</button>
               </li>
-              <li><button @click="setDefaultCredentials" class="dropdown-item">Reestablecer a las credenciales por
-                  defecto</button></li>
 
               <li v-if="isLoggedIn">
                 <hr class="dropdown-divider">
@@ -94,6 +92,7 @@ import { useAdminStore } from '@/store/adminStore';
 
 export default {
   name: 'AppNavbar',
+  inject: ['showToast'],
   data() {
     return {
       dataManager: new dataManager(),
@@ -157,7 +156,7 @@ export default {
     },
     async keygame() {
       if (this.buyAppId.trim() === '') {
-        alert("Por favor, ingrese un AppId válido.");
+        this.showToast('warning', 'Advertencia', 'Por favor, ingrese un AppId válido.');
         return;
       }
       try {
@@ -166,10 +165,10 @@ export default {
           //return;
           this.$router.push({ path: '/game', query: { appId: this.buyAppId } });
         } else {
-          alert("AppId inválido.");
+          this.showToast('error', 'Error', 'AppId inválido.');
         }
       } catch (error) {
-        alert("AppId inválido.");
+        this.showToast('error', 'Error', 'AppId inválido.');
         return;
       } finally {
         this.buyAppId = '';

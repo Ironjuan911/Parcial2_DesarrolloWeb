@@ -47,6 +47,7 @@ export default {
     components: {
         alertModal
     },
+    inject: ['showToast', 'showConfirm'],
     emits: ['adminAdded', 'adminDeleted'],
     data() {
         return {
@@ -64,7 +65,7 @@ export default {
             if (!this.selectedUserIdToAdd) return;
             // Check if already an admin
             if (this.adminID.some(admin => String(admin.id || admin) === String(this.selectedUserIdToAdd))) {
-                alert("Este usuario ya es administrador.");
+                this.showToast('warning', 'Advertencia', 'Este usuario ya es administrador.');
                 return;
             }
 
@@ -74,20 +75,30 @@ export default {
                 await this.storageAdminID.createData(adminToSave);
                 this.$emit('adminAdded', adminToSave);
                 this.selectedUserIdToAdd = "";
-                // Sin alertModal - la tabla se actualizará automáticamente
+                this.showToast('success', 'Éxito', 'Administrador añadido correctamente.');
             } catch (error) {
                 console.error(error);
-                alert("Error al añadir administrador.");
+                this.showToast('error', 'Error', 'Error al añadir administrador.');
             }
         },
         async removeAdmin(index) {
-            if (!confirm("¿Revocar privilegios de administrador?")) return;
+            const confirmed = await this.showConfirm({
+                title: 'Revocar Privilegios',
+                message: '¿Revocar privilegios de administrador?',
+                type: 'danger',
+                confirmText: 'Sí, revocar',
+                cancelText: 'Cancelar'
+            });
+
+            if (!confirmed) return;
+
             try {
                 await this.storageAdminID.deleteData(index);
                 this.$emit('adminDeleted', index);
+                this.showToast('success', 'Éxito', 'Privilegios de administrador revocados.');
             } catch (error) {
                 console.error(error);
-                alert("Error al eliminar administrador.");
+                this.showToast('error', 'Error', 'Error al eliminar administrador.');
             }
         }
     },

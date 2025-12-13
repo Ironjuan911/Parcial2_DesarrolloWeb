@@ -77,6 +77,7 @@ export default {
     name: 'AdminGames',
     props: ['gameProducts', 'storageProducts'],
     emits: ['productAdded', 'productDeleted'],
+    inject: ['showConfirm', 'showToast'],
     components: {
         defaultModal,
         alertModal,
@@ -167,22 +168,30 @@ export default {
                 this.$emit('productAdded', productToSave);
 
                 this.$refs.defaultModal.closeModal();
-
-                // No alert modal - la tabla se actualizará automáticamente
+                this.showToast('success', 'Éxito', 'Juego añadido al catálogo correctamente.');
             } catch (error) {
                 console.error("Error al guardar producto:", error);
-                this.$refs.alertModal.alertM("Error", "Error al guardar el juego: " + error.message);
+                this.showToast('error', 'Error', 'Error al guardar el juego: ' + error.message);
             }
         },
         async deleteProduct(index) {
-            if (!confirm("¿Eliminar este juego del catálogo?")) return;
+            const confirmed = await this.showConfirm({
+                title: 'Eliminar Juego',
+                message: '¿Eliminar este juego del catálogo?',
+                type: 'danger',
+                confirmText: 'Sí, eliminar',
+                cancelText: 'Cancelar'
+            });
+
+            if (!confirmed) return;
+
             try {
                 await this.storageProducts.deleteData(index);
                 this.$emit('productDeleted', index);
-                // El watch de gameProducts actualizará automáticamente steamGameList
+                this.showToast('success', 'Éxito', 'Juego eliminado del catálogo.');
             } catch (error) {
                 console.error(error);
-                this.$refs.alertModal.alertM("Error", "Error al eliminar el juego.");
+                this.showToast('error', 'Error', 'Error al eliminar el juego.');
             }
         }
     }

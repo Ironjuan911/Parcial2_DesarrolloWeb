@@ -1,5 +1,7 @@
 <template>
   <div id="app" data-bs-theme="dark" class="--bg-dark">
+    <ToastNotification ref="toast" />
+    <ConfirmModal ref="confirmModal" />
     <RouterView />
   </div>
 </template>
@@ -9,7 +11,8 @@
 import { RouterView } from 'vue-router'
 import { ref } from 'vue';
 import storageLE from './services/storageLE';
-//import LoadingScreen from './components/loadingComponents/loadingScreen.vue';
+import ToastNotification from './components/notifications/ToastNotification.vue';
+import ConfirmModal from './components/modals/ConfirmModal.vue';
 
 import { useAdminStore } from '@/store/adminStore';
 
@@ -27,7 +30,18 @@ export default {
   provide() {
     return {
       gameListApp: ref(this.gameList),
-      steamGameListApp: ref(this.steamGameList)
+      steamGameListApp: ref(this.steamGameList),
+      showToast: (type, title, message) => {
+        if (this.$refs.toast) {
+          this.$refs.toast[type](title, message);
+        }
+      },
+      showConfirm: async (options) => {
+        if (this.$refs.confirmModal) {
+          return await this.$refs.confirmModal.show(options);
+        }
+        return false;
+      }
     }
   },
 
@@ -40,11 +54,12 @@ export default {
     console.log('App mounted.')
   },
   components: {
-    //LibraryView,
-    //LoadingScreen,
+    ToastNotification,
+    ConfirmModal,
     RouterView
   }
 }
+
 
 </script>
 

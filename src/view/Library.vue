@@ -30,6 +30,7 @@ import StorageLE from '../services/storageLE.js'
 
 export default {
     name: 'LibraryView',
+    inject: ['showToast'],
     components: {
         AppNavbar,
         libraryCard
@@ -145,7 +146,7 @@ export default {
                 console.error('Error actualizando en Google Sheets:', error);
             }
 
-            alert("Juego reembolsado exitosamente. El juego ha sido removido de tu biblioteca.");
+            this.showToast('success', 'Reembolso Exitoso', 'El juego ha sido removido de tu biblioteca.');
         }
     }
 }
