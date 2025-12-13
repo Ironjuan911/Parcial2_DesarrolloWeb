@@ -7,7 +7,7 @@ import LoginView from '../view/login.vue'
 import ProductsView from '../view/products.vue'
 import RegistrationView from '../view/registration.vue'
 import LibraryView from '../view/Library.vue'
-import AdminView from '../view/adminT.vue'
+import AdminView from '../view/admin.vue'
 
 
 const routes = [

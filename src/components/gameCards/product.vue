@@ -1,16 +1,18 @@
 <template>
-    <router-link v-if="!placeholderMode" :to="{ path: '/game', query: { appId: gameData.steam_appid } }"
-        class="card productCard bg-info text-decoration-none" data-bs-theme="dark">
-        <img :src=gameData.header_image class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">{{ gameData.name }}</h5>
-            <div class="card bg-secondary px-1 d-inline-block">
-                <p class="card-text">{{ gameData.is_free ? 'Free to Play' :
-                    (gameData.price_overview?.final_formatted) }}</p>
-            </div>
+    <template v-if="!placeholderMode">
+        <component :is="linkMode ? 'router-link' : 'div'" v-bind="linkProps"
+            class="card productCard bg-info text-decoration-none" data-bs-theme="dark">
+            <img :src=gameData.header_image class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ gameData.name }}</h5>
+                <div class="card bg-secondary px-1 d-inline-block">
+                    <p class="card-text">{{ gameData.is_free ? 'Free to Play' :
+                        (gameData.price_overview?.final_formatted) }}</p>
+                </div>
 
-        </div>
-    </router-link>
+            </div>
+        </component>
+    </template>
 
     <div v-else>
         <div class="card productCard bg-info text-decoration-none" data-bs-theme="dark">
@@ -33,7 +35,7 @@
 <script>
 export default {
     name: "productCard",
-    props: ['gameData'],
+    props: ['gameData', 'isLink'],
     data() {
         return {
         }
@@ -41,6 +43,18 @@ export default {
     computed: {
         placeholderMode() {
             return !this.gameData;
+        },
+        linkMode() {
+            if (this.isLink == null) {
+                return true;
+            }
+            return this.isLink;
+        },
+        linkProps() {
+            if (this.linkMode) {
+                return { to: { path: '/game', query: { appId: this.gameData.steam_appid } } };
+            }
+            return {};
         }
     }
 }

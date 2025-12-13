@@ -43,7 +43,7 @@
 
 <script>
 
-import AppNavbar from '../components/Navbar.vue'
+import AppNavbar from '../components/navs/Navbar.vue'
 
 import storageLE from '../services/storageLE.js'
 import loadingScreen from '@/components/loadingComponents/loadingScreen.vue';

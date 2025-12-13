@@ -34,21 +34,21 @@
 
 <script>
 
-import AppNavbar from '../components/Navbar.vue'
+import AppNavbar from '../components/navs/Navbar.vue'
 
 export default {
     name: 'HomeView',
     components: {
         AppNavbar
-    },data() {
+    }, data() {
         return {
             isLoggedIn: false,
         }
-    },mounted() {
+    }, mounted() {
         const usuarioLogueado = localStorage.getItem('user');
         if (usuarioLogueado) {
             this.isLoggedIn = true;
         }
-    }   
+    }
 }
 </script>

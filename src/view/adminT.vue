@@ -240,9 +240,9 @@
 
 <script>
 import storageLE from '@/services/storageLE';
-import AppNavbar from '../components/Navbar.vue'
+import AppNavbar from '../components/navs/Navbar.vue'
 import { useAdminStore } from '@/store/adminStore';
-import steamDB from '@/logic/steamDB'; // Importamos la lógica de Steam
+import steamDB from '@/services/steamDB'; // Importamos la lógica de Steam
 import { Modal } from 'bootstrap';
 import LoadingScreen from '../components/loadingComponents/loadingScreen.vue';
 
@@ -317,7 +317,7 @@ export default {
                         } catch (e) {
                             user.library = [];
                         }
-                    } 
+                    }
                     return user;
                 });
                 this.products = productsData;

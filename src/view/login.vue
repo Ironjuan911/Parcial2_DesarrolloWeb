@@ -34,7 +34,7 @@
 
 <script>
 
-import AppNavbar from '../components/Navbar.vue'
+import AppNavbar from '../components/navs/Navbar.vue'
 import { useAdminStore } from '../store/adminStore'
 
 import storageLE from '../services/storageLE.js'

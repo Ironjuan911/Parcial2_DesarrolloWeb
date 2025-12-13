@@ -9,7 +9,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <slot></slot>
+                    <slot name="default"></slot>
                 </div>
                 <div class="modal-footer">
                     <slot name="footer"></slot>
@@ -48,4 +48,3 @@ export default {
     }
 }
 </script>
-

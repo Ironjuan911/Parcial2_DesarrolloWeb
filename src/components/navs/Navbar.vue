@@ -3,7 +3,7 @@
   <nav class="navbar navbar-expand-lg" style="background-color: #0c0c0c;" data-bs-theme="dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
-        <img src="../assets/logo.png" class="me-1" alt="" width="30" height="30" />
+        <img src="@/assets/logo.png" class="me-1" alt="" width="30" height="30" />
         SteamLE
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -88,7 +88,7 @@
 
 <script>
 import dataManager from '@/logic/dataManager';
-import steamDB from '@/logic/steamDB';
+import steamDB from '@/services/steamDB';
 
 import { useAdminStore } from '@/store/adminStore';
 

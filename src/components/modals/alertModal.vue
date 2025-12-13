@@ -1,15 +1,11 @@
 <template>
-    <defaultModal :id="id" ref="modal" @close="onClose">
-        <template v-slot:title>
-            {{ title }}
-        </template>
-
+    <defaultModal :id="id" :title="title" ref="modal" @close="onClose">
         <p>{{ message }}</p>
     </defaultModal>
 </template>
 
 <script>
-import defaultModal from '@/components/modals/dafaultModal.vue';
+import defaultModal from '@/components/modals/defaultModal.vue';
 
 export default {
     name: 'AlertModal',

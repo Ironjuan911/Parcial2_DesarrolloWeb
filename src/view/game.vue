@@ -63,12 +63,14 @@
 
                     <div class="my-3 px-3 py-4 card dark">
                         <h4 class="mb-3">System requirements</h4>
-                        <div>
-                            <p v-html="game.pc_requirements?.minimum"></p>
-                        </div>
-                        <div class="mt-3">
-                            <p v-html="game.pc_requirements?.recommended"></p>
-                        </div>
+                        <TabList>
+                            <TabItem title="Minimum">
+                                <p v-html="game.pc_requirements?.minimum"></p>
+                            </TabItem>
+                            <TabItem title="Recommended">
+                                <p v-html="game.pc_requirements?.recommended"></p>
+                            </TabItem>
+                        </TabList>
                     </div>
 
                 </div>
@@ -83,19 +85,23 @@
 <script>
 
 import router from '@/router';
-import AppNavbar from '../components/Navbar.vue'
-import steamDB from '../logic/steamDB.js'
+import AppNavbar from '../components/navs/Navbar.vue'
+import steamDB from '../services/steamDB.js'
 import dataManager from '@/logic/dataManager';
 
 import LoadingIcon from '../components/loadingComponents/loadingIcon.vue';
 import AlertModal from '../components/modals/alertModal.vue';
+import TabList from '@/components/navs/TabList.vue';
+import TabItem from '@/components/navs/TabItem.vue';
 
 export default {
     name: 'GameView',
     components: {
         AppNavbar,
         LoadingIcon,
-        AlertModal
+        AlertModal,
+        TabList,
+        TabItem
     },
     data() {
         return {

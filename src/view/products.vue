@@ -21,10 +21,10 @@
 
 <script>
 
-import AppNavbar from '../components/Navbar.vue'
+import AppNavbar from '../components/navs/Navbar.vue'
 import ProductCard from '../components/gameCards/product.vue'
 
-import steamDB from '../logic/steamDB.js'
+import steamDB from '../services/steamDB.js'
 import storageLE from '@/services/storageLE'
 
 import LoadingScreen from '../components/loadingComponents/loadingScreen.vue'
